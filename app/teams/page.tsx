@@ -26,22 +26,40 @@ const TeamsPage = async () => {
   return (
     <div className="flex flex-col gap-4 max-w-6xl mx-auto p-8">
       <h1 className="text-2xl font-bold text-center mb-4">All the teams in the NFL</h1>
-      <ul className="grid grid-cols-4 gap-4">
+      <ul className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-x-2 gap-y-8">
         {teams.map((team) => {
           const { id, abbreviation, city, conference, division, name, establishedYear, logoUrl } =
             team;
+          const imgUrl = logoUrl ? logoUrl.toString() : "/nfl_logo.png";
+          const year = establishedYear ? establishedYear.toString() : "Unknown";
 
           return (
-            <li key={id}>
-              <h2 className="text-lg font-bold">{name}</h2>
-              <div className="flex flex-col justify-center gap-2">
-                <p>Team Code: {abbreviation}</p>
-                <p>City: {city}</p>
-                <p>Conferene: {conference}</p>
-                <p>Division: {division}</p>
-                <p>Year Established: {establishedYear}</p>
+            <li key={id} className="col-span-1 flex flex-col gap-2">
+              <h2 className="text-lg font-bold text-center">{name}</h2>
+              <Image
+                src={imgUrl}
+                alt={`${name} Logo`}
+                width={50}
+                height={50}
+                className="max-w-[100px] w-full mx-auto"
+              />
+              <div className="flex flex-col gap-2 justify-start">
+                <p>
+                  <strong>Team Code:</strong> {abbreviation}
+                </p>
+                <p>
+                  <strong>City:</strong> {city}
+                </p>
+                <p>
+                  <strong>Conferene:</strong> {conference}
+                </p>
+                <p>
+                  <strong>Division:</strong> {division}
+                </p>
+                <p>
+                  <strong>Year Established:</strong> {year}
+                </p>
               </div>
-              <Image src={logoUrl || "/nfl_logo.svg"} alt={`${name} Logo`} width={50} height={50} />
             </li>
           );
         })}
