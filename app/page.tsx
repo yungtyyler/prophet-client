@@ -1,20 +1,10 @@
+import { Team } from "@/types";
 import Image from "next/image";
 import React from "react";
 
-type NFLTeam = {
-  id: number; // primary key
-  name: string; // e.g. "Cowboys"
-  city: string; // e.g. "Dallas"
-  abbreviation: string; // e.g. "DAL"
-  conference: string; // e.g. "NFC"
-  division: string; // e.g. "East"
-  establishedYear?: number; // optional, if in table
-  logoUrl?: string; // optional, if stored
-};
-
 export default async function Home() {
   console.log(process.env.NEXT_PUBLIC_API_URL);
-  const teams: NFLTeam[] = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams`, {
+  const teams: Team[] = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams`, {
     cache: "no-store",
   }).then((res) => {
     if (!res.ok) {
@@ -28,21 +18,23 @@ export default async function Home() {
       <h1 className="text-2xl font-bold text-center mb-4">All the teams in the NFL</h1>
       <ul className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-x-2 gap-y-8">
         {teams.map((team) => {
-          const { id, abbreviation, city, conference, division, name, establishedYear, logoUrl } =
+          const { id, abbreviation, city, conference, division, name, founded_year, logo_url } =
             team;
-          const imgUrl = logoUrl ? logoUrl.toString() : "/nfl_logo.png";
-          const year = establishedYear ? establishedYear.toString() : "Unknown";
+          const imgUrl = logo_url ? logo_url.toString() : "/nfl_logo.png";
+          const year = founded_year ? founded_year.toString() : "Unknown";
 
           return (
-            <li key={id} className="col-span-1 flex flex-col gap-2">
+            <li key={id} className="col-span-1 flex flex-col gap-2 items-center">
               <h2 className="text-lg font-bold text-center">{name}</h2>
-              <Image
-                src={imgUrl}
-                alt={`${name} Logo`}
-                width={50}
-                height={50}
-                className="max-w-[100px] w-full mx-auto"
-              />
+              <div className="w-[100px] h-[100px] p-2 my-4">
+                <Image
+                  src={`${imgUrl}?size=100`}
+                  alt={`${name} Logo`}
+                  width={100}
+                  height={100}
+                  className="object-fill w-fit mx-auto"
+                />
+              </div>
               <div className="flex flex-col gap-2 justify-start">
                 <p>
                   <strong>Team Code:</strong> {abbreviation}
